@@ -56,7 +56,7 @@ public class CommonUtils {
                 .setFileOverride(true) // 是否覆盖已有文件
                 //.setOpen(true) // 是否打开输出目录
                 .setDateType(dateType) // 时间采用java 8，（操作工具类：JavaLib => DateTimeUtils）
-                .setActiveRecord(true)// 不需要ActiveRecord特性的请改为false
+                .setActiveRecord(false)// 不需要特性的请改为false
                 .setEnableCache(false)// XML 二级缓存
                 .setBaseResultMap(false)// XML ResultMap
                 .setBaseColumnList(false)// XML columList
@@ -120,7 +120,7 @@ public class CommonUtils {
                 // to do nothing
             }
         };
-        List<FileOutConfig> fileOutConfigList = new ArrayList<FileOutConfig>();
+        List<FileOutConfig> fileOutConfigList = new ArrayList<>();
         fileOutConfigList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -158,9 +158,13 @@ public class CommonUtils {
         //DataSourceConfig dataSourceConfig = dataSourceConfig(dbType, dbUrl, username, password, driver);
         DataSourceConfig dataSourceConfig = dataSourceConfig(bo);
         StrategyConfig strategyConfig = strategyConfig(bo);
+        strategyConfig.setRestControllerStyle(true);
+        strategyConfig.setSuperEntityClass("SpecialBaseDBO");
+//        strategyConfig.setSuperEntityColumns("id","delete_status","create_time","update_time","create_user_id","update_user_id","tenant_id");
         PackageConfig packageConfig = packageConfig(bo);
 //        InjectionConfig injectionConfig = injectionConfig(packageConfig);
         AbstractTemplateEngine templateEngine = getTemplateEngine(bo);
+        TemplateConfig templateConfig = new TemplateConfig();
         new AutoGenerator()
                 .setGlobalConfig(globalConfig)
                 .setDataSource(dataSourceConfig)
