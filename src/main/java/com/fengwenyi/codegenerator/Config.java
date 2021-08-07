@@ -56,12 +56,12 @@ public class Config {
     public static String PROJECT_PATH = System.getProperty("user.dir");
 
     /** 输出目录 */
-    public static final String OUTPUT_DIR = PROJECT_PATH + "/temp/code-generator";
+    public static  String OUTPUT_DIR = PROJECT_PATH + "/temp/code-generator";
 
     /** 模板引擎。velocity / freemarker / beetl */
-    public static final String TEMPLATE_ENGINE = "velocity";
+    public static  String TEMPLATE_ENGINE = "velocity";
 
     /** 是否支持Swagger，默认不支持 */
-    public static final Boolean SWAGGER_SUPPORT = false;
+    public static  Boolean SWAGGER_SUPPORT = false;
 
 }
