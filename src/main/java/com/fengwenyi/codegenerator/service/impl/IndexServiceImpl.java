@@ -59,7 +59,7 @@ public class IndexServiceImpl implements IIndexService {
         if (!StringUtils.hasText(requestVo.getDbTypeName()) || DbType.getDbType(requestVo.getDbTypeName()) == DbType.MYSQL) {
             // mysql
             dbType = DbType.MYSQL;
-            dbUrl = "jdbc:mysql://" + requestVo.getHost() + "/" + requestVo.getDbName();
+            dbUrl = "jdbc:mysql://" + requestVo.getHost() + "/" + requestVo.getDbName()+"?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC";
             driver = "com.mysql.cj.jdbc.Driver";
         } else if (DbType.getDbType(requestVo.getDbTypeName()) == DbType.ORACLE) {
             dbType = DbType.ORACLE;

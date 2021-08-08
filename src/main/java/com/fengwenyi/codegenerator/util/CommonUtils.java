@@ -131,6 +131,7 @@ public class CommonUtils {
             public void initTableMap(TableInfo tableInfo){
                 Map<String, Object> map = new HashMap<>();
                 String capitalFirst = NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName()));
+                map.put("camelName",NamingStrategy.underlineToCamel(tableInfo.getName()));
                 map.put("entityName", capitalFirst);
                 map.put("paramPackage", packageConfig.getParent()+".entity.param");
                 map.put("voPackage", packageConfig.getParent()+".entity.vo");
@@ -139,6 +140,8 @@ public class CommonUtils {
                 map.put("daoName",String.format("I%sDao",capitalFirst));
                 map.put("daoImplName",String.format("%sDaoImpl",capitalFirst));
                 map.put("convertName",String.format("%sConvert",capitalFirst));
+                map.put("voName",String.format("%sVO",capitalFirst));
+                map.put("paramName",String.format("%sParam",capitalFirst));
                 map.put("convertPackage",packageConfig.getParent()+".convert");
                 this.setMap(map);
             }
