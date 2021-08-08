@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     public ResultTemplate<Void> runtimeException(RuntimeException e) {
         String errMsg = ExceptionUtils.getStackTrace(e);
         log.error(errMsg);
-        return ResultTemplate.fail("服务异常");
+        return ResultTemplate.fail(ExceptionUtils.getMessage(e));
     }
 
     @ExceptionHandler(Exception.class)
@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResultTemplate<Void> exception(Exception e) {
         String errMsg = ExceptionUtils.getStackTrace(e);
         log.error(errMsg);
-        return ResultTemplate.fail(errMsg);
+        return ResultTemplate.fail(ExceptionUtils.getMessage(e));
     }
 
 }

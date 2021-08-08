@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
 <#if swagger2>
 import io.swagger.annotations.*;
 </#if>
@@ -31,6 +32,7 @@ import ${superControllerClassPackage};
  * @author ${author}
  * @since ${date}
  */
+@Validated
 <#if restControllerStyle>
 @RestController
 <#else>
