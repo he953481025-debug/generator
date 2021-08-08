@@ -3,6 +3,12 @@ package ${package.ServiceImpl};
 
 import ${package.Service}.${table.serviceName};
 import org.springframework.stereotype.Service;
+import ${cfg.voPackage}.${cfg.voName};
+import ${cfg.paramPackage}.${cfg.paramName};
+import ${cfg.daoPackage}.${cfg.daoName};
+import ${cfg.convertPackage}.${cfg.convertName};
+
+import javax.annotation.Resource;
 
 /**
  * <p>
@@ -20,31 +26,31 @@ open class ${table.serviceImplName} : ${superServiceImplClass}<${table.mapperNam
 <#else>
 public class ${table.serviceImplName} implements ${table.serviceName} {
 
- @Resource
- private ${cfg.daoName} dao;
+    @Resource
+    private ${cfg.daoName} ${cfg.camelName}Dao;
 
- @Resource
- private ${cfg.convertName} convert;
+    @Resource
+    private ${cfg.convertName} ${cfg.camelName}Convert;
 
- @Override
- public Boolean insert(${cfg.entityName}Param param){
- return dao.save(convert.paramConvertToDbo(param));
- }
+    @Override
+    public Boolean insert(${cfg.paramName} param){
+        return ${cfg.camelName}Dao.save(${cfg.camelName}Convert.paramConvertToDbo(param));
+    }
 
- @Override
- public Boolean update(${cfg.entityName}Param param){
- return dao.update(convert.paramConvertToDbo(param));
- }
+    @Override
+    public Boolean update(${cfg.paramName} param){
+        return ${cfg.camelName}Dao.updateById(${cfg.camelName}Convert.paramConvertToDbo(param));
+    }
 
- @Override
- public ${cfg.entityName}VO findById(Long id){
- return convert.dboConvertToVo(dao.getById(id));
- }
+    @Override
+    public ${cfg.voName} findById(Long id){
+        return ${cfg.camelName}Convert.dboConvertToVo(${cfg.camelName}Dao.getById(id));
+    }
 
- @Override
- public Boolean deleteById(Long id){
- return dao.removeById(id);
- }
+    @Override
+    public Boolean deleteById(Long id){
+        return ${cfg.camelName}Dao.removeById(id);
+    }
 
 }
 </#if>

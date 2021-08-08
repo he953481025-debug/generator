@@ -1,7 +1,7 @@
 package com.fengwenyi.codegenerator.service;
 
 import com.fengwenyi.api.result.ResultTemplate;
-import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestVo;
+import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestParam;
 
 /**
  * @author <a href="https://www.fengwenyi.com">Erwin Feng</a>
@@ -14,6 +14,6 @@ public interface IIndexService {
      * @param requestVo
      * @return
      */
-    ResultTemplate<Void> codeGenerator(CodeGeneratorRequestVo requestVo);
+    ResultTemplate<Void> codeGenerator(CodeGeneratorRequestParam requestVo);
 
 }

@@ -13,7 +13,7 @@ import org.mapstruct.Mapper;
  * @author ${author}
  * @since ${date}
  */
-@Mapper(componentModel="spring")
+@Mapper(componentModel = "spring")
 public interface ${cfg.convertName}  {
 
    ${entity} paramConvertToDbo(${cfg.entityName}Param param);

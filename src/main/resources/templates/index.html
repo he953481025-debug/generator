@@ -72,9 +72,9 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">数据库地址</label>
+                    <label class="layui-form-label"><span class="red-star">*</span>数据库地址</label>
                     <div class="layui-input-block">
-                        <input type="text" name="host"   placeholder="ip:port / url" autocomplete="off" class="layui-input">
+                        <input type="text" name="host"   placeholder="ip:port / url" autocomplete="off" class="layui-input" required>
                     </div>
                 </div>
 
@@ -86,16 +86,16 @@
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">数据库用户名</label>
+                    <label class="layui-form-label"><span class="red-star">*</span>数据库用户名</label>
                     <div class="layui-input-block">
-                        <input type="text" name="username"    placeholder="请输入数据库用户名" autocomplete="off" class="layui-input">
+                        <input type="text" name="username" required   placeholder="请输入数据库用户名" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">数据库密码</label>
+                    <label class="layui-form-label"><span class="red-star">*</span>数据库密码</label>
                     <div class="layui-input-block">
-                        <input type="password" name="password" placeholder="请输入数据库密码" autocomplete="off" class="layui-input">
+                        <input type="password" name="password" required placeholder="请输入数据库密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -103,9 +103,9 @@
                 <blockquote class="layui-elem-quote">表配置</blockquote>
 
                 <div class="layui-form-item">
-                    <label class="layui-form-label">表名</label>
+                    <label class="layui-form-label"><span class="red-star">*</span>表名</label>
                     <div class="layui-input-block">
-                        <textarea name="tableNames" placeholder="请输入表名，以英文逗号隔开" class="layui-textarea"></textarea>
+                        <textarea name="tableNames" required placeholder="请输入表名，以英文逗号隔开" class="layui-textarea"></textarea>
                     </div>
                 </div>
 
@@ -143,15 +143,15 @@
                     <h2 class="layui-colla-title">可选配置</h2>
                     <div class="layui-colla-content layui-show">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">作者</label>
+                            <label class="layui-form-label"><span class="red-star">*</span>作者</label>
                             <div class="layui-input-block">
-                                <input id="inputAuthor" type="text" name="author" value="brandon" placeholder="请输入作者" autocomplete="off" class="layui-input">
+                                <input id="inputAuthor" required type="text" name="author" placeholder="请输入作者" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">输出目录</label>
+                            <label class="layui-form-label"><span class="red-star">*</span>输出目录</label>
                             <div class="layui-input-block">
-                                <input type="text" name="outDir" placeholder="输出目录" autocomplete="off" class="layui-input">
+                                <input type="text" name="outDir" required placeholder="输出目录" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                     </div>
@@ -266,8 +266,8 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">模板引擎</label>
                             <div class="layui-input-block">
-                                <input type="radio" name="templateEngine" value="velocity" title="velocity" checked>
-                                <input type="radio" name="templateEngine" value="freemarker" title="freemarker">
+                                <input type="radio" name="templateEngine" value="velocity" title="velocity" >
+                                <input type="radio" name="templateEngine" value="freemarker" title="freemarker" checked>
                                 <input type="radio" name="templateEngine" value="beetl" title="beetl">
                             </div>
                         </div>

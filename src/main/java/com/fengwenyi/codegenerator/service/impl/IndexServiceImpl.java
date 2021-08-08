@@ -6,7 +6,7 @@ import com.fengwenyi.codegenerator.bo.CodeGeneratorBo;
 import com.fengwenyi.codegenerator.exception.BizException;
 import com.fengwenyi.codegenerator.service.IIndexService;
 import com.fengwenyi.codegenerator.util.CommonUtils;
-import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestVo;
+import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 public class IndexServiceImpl implements IIndexService {
     @Override
-    public ResultTemplate<Void> codeGenerator(CodeGeneratorRequestVo requestVo) {
+    public ResultTemplate<Void> codeGenerator(CodeGeneratorRequestParam requestVo) {
 
         CodeGeneratorBo bo = new CodeGeneratorBo();
 
@@ -50,7 +50,7 @@ public class IndexServiceImpl implements IIndexService {
 
 
     // 处理数据库
-    private void handleDb(CodeGeneratorRequestVo requestVo, CodeGeneratorBo bo) {
+    private void handleDb(CodeGeneratorRequestParam requestVo, CodeGeneratorBo bo) {
         DbType dbType;
         String dbUrl;
         String username = requestVo.getUsername();
@@ -76,7 +76,7 @@ public class IndexServiceImpl implements IIndexService {
     }
 
     // 处理表
-    private void handleTable(CodeGeneratorRequestVo requestVo, CodeGeneratorBo bo) {
+    private void handleTable(CodeGeneratorRequestParam requestVo, CodeGeneratorBo bo) {
         bo
                 .setTableNames(split(requestVo.getTableNames()))
                 .setTablePrefixes(split(requestVo.getTablePrefixes()))

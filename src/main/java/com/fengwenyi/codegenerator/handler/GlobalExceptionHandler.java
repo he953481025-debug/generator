@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     public ResultTemplate<Void> exception(Exception e) {
         String errMsg = ExceptionUtils.getStackTrace(e);
         log.error(errMsg);
-        return ResultTemplate.fail();
+        return ResultTemplate.fail(errMsg);
     }
 
 }

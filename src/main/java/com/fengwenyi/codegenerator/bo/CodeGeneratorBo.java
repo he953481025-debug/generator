@@ -18,11 +18,11 @@ public class CodeGeneratorBo {
     // 数据库类型
     private DbType dbType=DbType.MYSQL;
     // 数据库连接地址
-    private String dbUrl="10.0.10.13:23100";
+    private String dbUrl;
     // 数据库名称
-    private String username="root";
+    private String username;
     // 数据库密码
-    private String password="a123456";
+    private String password;
     // 数据库驱动
     private String driver;
 
@@ -36,40 +36,40 @@ public class CodeGeneratorBo {
     private String [] excludeTableNames;
 
     // 作者
-    private String author="brandon";
+    private String author;
     // 输入目录
     private String outDir;
 
     // 实体类包名
-    private String packageEntity="entity.dbo";
+    private String packageEntity;
     // mapper包名
-    private String packageMapper="dao.mysql.mapper";
+    private String packageMapper;
     // mapper XML目录名
     private String packageMapperXml;
     // service包名
-    private String packageService="service";
+    private String packageService;
     // serviceImpl包名
-    private String packageServiceImpl="service.impl";
+    private String packageServiceImpl;
     // controller包名
-    private String packageController="controller";
+    private String packageController;
 
     // 实体类文件名格式
-    private String fileNamePatternEntity="%sDBO";
+    private String fileNamePatternEntity;
     // mapper文件名格式
-    private String fileNamePatternMapper="%sMapper";
+    private String fileNamePatternMapper;
     // mapper XML文件名格式
     private String fileNamePatternMapperXml;
     // service文件名格式
-    private String fileNamePatternService="I%sService";
+    private String fileNamePatternService;
     // serviceImpl文件名格式
-    private String fileNamePatternServiceImpl="%sServiceImpl";
+    private String fileNamePatternServiceImpl;
     // controller文件名格式
-    private String fileNamePatternController="%sController";
+    private String fileNamePatternController;
 
     // 逻辑删除字段
-    private String fieldLogicDelete="delete_status";
+    private String fieldLogicDelete;
     // 乐观锁字段
-    private String fieldVersion="version";
+    private String fieldVersion;
 
     // 模版引擎
     private String templateEngine;

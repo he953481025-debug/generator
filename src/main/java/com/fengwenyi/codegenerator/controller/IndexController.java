@@ -2,7 +2,7 @@ package com.fengwenyi.codegenerator.controller;
 
 import com.fengwenyi.api.result.ResultTemplate;
 import com.fengwenyi.codegenerator.service.IIndexService;
-import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestVo;
+import com.fengwenyi.codegenerator.vo.CodeGeneratorRequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +28,7 @@ public class IndexController {
 
     @PostMapping("/code-generator")
     @ResponseBody
-    public ResultTemplate<Void> codeGenerator(@RequestBody @Validated CodeGeneratorRequestVo requestVo) {
+    public ResultTemplate<Void> codeGenerator(@RequestBody @Validated CodeGeneratorRequestParam requestVo) {
         return indexService.codeGenerator(requestVo);
     }
 

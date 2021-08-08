@@ -9,7 +9,6 @@ layui.use(function() {
         ,jQuery = layui.jquery;
 
 
-    jQuery("#inputAuthor").val('<a href="https://fengwenyi.com">Erwin Feng</a>')
 
 
     //监听提交

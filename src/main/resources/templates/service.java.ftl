@@ -1,6 +1,7 @@
 package ${package.Service};
 
-
+import ${cfg.voPackage}.${cfg.voName};
+import ${cfg.paramPackage}.${cfg.paramName};
 
 /**
  * <p>
@@ -15,12 +16,12 @@ interface ${table.serviceName} : ${superServiceClass}<${entity}>
 <#else>
 public interface ${table.serviceName}  {
 
-  Boolean insert(${cfg.entityName}Param param);
+    Boolean insert(${cfg.paramName} param);
 
-  Boolean update(${cfg.entityName}Param param);
+    Boolean update(${cfg.paramName} param);
 
-  ${cfg.entityName}VO findById(Long id);
+    ${cfg.voName} findById(Long id);
 
-  Boolean deleteById(Long id);
+    Boolean deleteById(Long id);
 }
 </#if>

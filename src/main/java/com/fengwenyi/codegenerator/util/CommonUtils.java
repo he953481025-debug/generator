@@ -25,6 +25,28 @@ import java.util.*;
  */
 public class CommonUtils {
 
+
+    public static void execute(CodeGeneratorBo bo) {
+        GlobalConfig globalConfig = globalConfig(bo);
+        //DataSourceConfig dataSourceConfig = dataSourceConfig(dbType, dbUrl, username, password, driver);
+        DataSourceConfig dataSourceConfig = dataSourceConfig(bo);
+        StrategyConfig strategyConfig = strategyConfig(bo);
+        PackageConfig packageConfig = packageConfig(bo);
+        InjectionConfig injectionConfig = injectionConfig(packageConfig);
+        AbstractTemplateEngine templateEngine = getTemplateEngine(bo);
+        TemplateConfig templateConfig = getTemplateConfig();
+
+        new AutoGenerator()
+                .setGlobalConfig(globalConfig)
+                .setDataSource(dataSourceConfig)
+                .setStrategy(strategyConfig)
+                .setPackageInfo(packageConfig)
+                .setTemplateEngine(templateEngine)
+                .setTemplate(templateConfig)
+                .setCfg(injectionConfig)
+                .execute();
+    }
+
     /**
      * 数据库连接信息
      * @param bo {@link CodeGeneratorBo}
@@ -40,7 +62,7 @@ public class CommonUtils {
                 ;
     }
 
-    // 配置
+    // 全局配置
     private static GlobalConfig globalConfig(CodeGeneratorBo bo) {
         String outDir = bo.getOutDir();
         if (!StringUtils.hasText(outDir)) {
@@ -57,12 +79,18 @@ public class CommonUtils {
                 .setOutputDir(outDir+"/src/main/java")
                 .setFileOverride(true) // 是否覆盖已有文件
                 //.setOpen(true) // 是否打开输出目录
-                .setDateType(dateType) // 时间采用java 8，（操作工具类：JavaLib => DateTimeUtils）
-                .setActiveRecord(false)// 不需要特性的请改为false
-                .setEnableCache(false)// XML 二级缓存
-                .setBaseResultMap(false)// XML ResultMap
-                .setBaseColumnList(false)// XML columList
-                .setKotlin(false) //是否生成 kotlin 代码
+                // 时间采用java 8，（操作工具类：JavaLib => DateTimeUtils）
+                .setDateType(dateType)
+                // 不需要特性的请改为false
+                .setActiveRecord(false)
+                // XML 二级缓存
+                .setEnableCache(false)
+                // XML ResultMap
+                .setBaseResultMap(false)
+                // XML columList
+                .setBaseColumnList(false)
+                //是否生成 kotlin 代码
+                .setKotlin(false)
                 // 自定义文件命名，注意 %s 会自动填充表实体属性！
                 .setEntityName(bo.getFileNamePatternEntity())
                 .setMapperName(bo.getFileNamePatternMapper())
@@ -70,8 +98,10 @@ public class CommonUtils {
                 .setServiceName(bo.getFileNamePatternService())
                 .setServiceImplName(bo.getFileNamePatternServiceImpl())
                 .setControllerName(bo.getFileNamePatternController())
-                .setIdType(IdType.ASSIGN_ID) // 主键类型
-                .setSwagger2(bo.getSwaggerSupport() != null && bo.getSwaggerSupport()) // model swagger2
+                // 主键类型
+                .setIdType(IdType.ASSIGN_ID)
+                // model swagger2
+                .setSwagger2(bo.getSwaggerSupport() != null && bo.getSwaggerSupport())
                 ;
 //                if (!serviceNameStartWithI)
 //                    config.setServiceName("%sService");
@@ -85,20 +115,32 @@ public class CommonUtils {
                 .setSuperEntityClass("SpecialBaseDBO")
                 .setSuperEntityColumns("id","delete_status","create_time","update_time","create_user_id","update_user_id","tenant_id")
                 .setEntitySerialVersionUID(false)
-                .setCapitalMode(true) // 全局大写命名 ORACLE 注意
-                .setSkipView(false) // 是否跳过视图
+                // 全局大写命名 ORACLE 注意
+                .setCapitalMode(true)
+                .setSkipView(false)
                 //.setDbColumnUnderline(true)
-                .setTablePrefix(bo.getTablePrefixes())// 此处可以修改为您的表前缀(数组)
-                .setFieldPrefix(bo.getFieldPrefixes()) // 字段前缀
-                .setNaming(NamingStrategy.underline_to_camel) // 表名生成策略
-                .setInclude(bo.getTableNames())//修改替换成你需要的表名，多个表名传数组
-                .setExclude(bo.getExcludeTableNames()) // 排除生成的表
-                .setEntityLombokModel(bo.getLombokModel() != null && bo.getLombokModel()) // lombok实体
-                .setChainModel(bo.getLombokChainModel() != null && bo.getLombokChainModel()) // 【实体】是否为构建者模型（默认 false）
-                .setEntityColumnConstant(false) // 【实体】是否生成字段常量（默认 false）// 可通过常量名获取数据库字段名 // 3.x支持lambda表达式
-                .setLogicDeleteFieldName(bo.getFieldLogicDelete()) // 逻辑删除属性名称
-                .setVersionFieldName(bo.getFieldVersion()) // 乐观锁字段名
-                .setEntityTableFieldAnnotationEnable(false) // 开启实体字段注解
+                // 此处可以修改为您的表前缀(数组)
+                .setTablePrefix(bo.getTablePrefixes())
+                // 字段前缀
+                .setFieldPrefix(bo.getFieldPrefixes())
+                // 表名生成策略
+                .setNaming(NamingStrategy.underline_to_camel)
+                //修改替换成你需要的表名，多个表名传数组
+                .setInclude(bo.getTableNames())
+                // 排除生成的表
+                .setExclude(bo.getExcludeTableNames())
+                // lombok实体
+                .setEntityLombokModel(bo.getLombokModel() != null && bo.getLombokModel())
+                // 【实体】是否为构建者模型（默认 false）
+                .setChainModel(bo.getLombokChainModel() != null && bo.getLombokChainModel())
+                // 【实体】是否生成字段常量（默认 false）// 可通过常量名获取数据库字段名 // 3.x支持lambda表达式
+                .setEntityColumnConstant(false)
+                // 逻辑删除属性名称
+                .setLogicDeleteFieldName(bo.getFieldLogicDelete())
+                // 乐观锁字段名
+                .setVersionFieldName(bo.getFieldVersion())
+                // 开启实体字段注解
+                .setEntityTableFieldAnnotationEnable(false)
                 ;
     }
 
@@ -115,6 +157,33 @@ public class CommonUtils {
                 ;
     }
 
+
+    /**
+     * 获取模板引擎
+     * @return 模板引擎 {@link AbstractTemplateEngine}
+     */
+    private static AbstractTemplateEngine getTemplateEngine(CodeGeneratorBo bo) {
+        String templateEngine = bo.getTemplateEngine();
+        switch (templateEngine) {
+            case "velocity":
+                return new VelocityTemplateEngine();
+            case "freemarker":
+                return new FreemarkerTemplateEngine();
+            case "beetl":
+                return new BeetlTemplateEngine();
+        }
+        return new FreemarkerTemplateEngine();
+    }
+
+    private static TemplateConfig getTemplateConfig() {
+        TemplateConfig templateConfig = new TemplateConfig();
+        templateConfig.setEntity("templates/entity.java");
+        templateConfig.setService("templates/service.java");
+        templateConfig.setServiceImpl("templates/serviceImpl.java");
+        templateConfig.setController("templates/controller.java");
+        return templateConfig;
+    }
+
     /**
      *
      * @param packageConfig
@@ -124,7 +193,6 @@ public class CommonUtils {
         InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {
-
                 // to do nothing
             }
             @Override
@@ -146,6 +214,7 @@ public class CommonUtils {
                 this.setMap(map);
             }
         };
+        // mapper模版
         List<FileOutConfig> fileOutConfigList = new ArrayList<>();
         fileOutConfigList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             @Override
@@ -158,7 +227,7 @@ public class CommonUtils {
                 }
             }
         });
-
+        // dao模版
         fileOutConfigList.add(new FileOutConfig("/templates/dao.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -170,6 +239,7 @@ public class CommonUtils {
                 return daoFile;
             }
         });
+        // daoImpl模版
         fileOutConfigList.add(new FileOutConfig("/templates/daoImpl.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -181,7 +251,7 @@ public class CommonUtils {
                 return daoFile;
             }
         });
-
+        // param模版
         fileOutConfigList.add(new FileOutConfig("/templates/param.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -193,7 +263,7 @@ public class CommonUtils {
                 return daoFile;
             }
         });
-
+        // vo模版
         fileOutConfigList.add(new FileOutConfig("/templates/vo.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -205,7 +275,7 @@ public class CommonUtils {
                 return daoFile;
             }
         });
-
+        // convert模版
         fileOutConfigList.add(new FileOutConfig("/templates/convert.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
@@ -220,47 +290,6 @@ public class CommonUtils {
 
         injectionConfig.setFileOutConfigList(fileOutConfigList);
         return injectionConfig;
-    }
-
-    /**
-     * 获取模板引擎
-     * @return 模板引擎 {@link AbstractTemplateEngine}
-     */
-    private static AbstractTemplateEngine getTemplateEngine(CodeGeneratorBo bo) {
-        String templateEngine = bo.getTemplateEngine();
-        switch (templateEngine) {
-            case "velocity":
-                return new VelocityTemplateEngine();
-            case "freemarker":
-                return new FreemarkerTemplateEngine();
-            case "beetl":
-                return new BeetlTemplateEngine();
-        }
-        return new VelocityTemplateEngine();
-    }
-
-    public static void execute(CodeGeneratorBo bo) {
-        GlobalConfig globalConfig = globalConfig(bo);
-        //DataSourceConfig dataSourceConfig = dataSourceConfig(dbType, dbUrl, username, password, driver);
-        DataSourceConfig dataSourceConfig = dataSourceConfig(bo);
-        StrategyConfig strategyConfig = strategyConfig(bo);
-        PackageConfig packageConfig = packageConfig(bo);
-        InjectionConfig injectionConfig = injectionConfig(packageConfig);
-        AbstractTemplateEngine templateEngine = getTemplateEngine(bo);
-        TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setEntity("templates/entity.java");
-        templateConfig.setService("templates/service.java");
-        templateConfig.setServiceImpl("templates/serviceImpl.java");
-        templateConfig.setController("templates/controller.java");
-        new AutoGenerator()
-                .setGlobalConfig(globalConfig)
-                .setDataSource(dataSourceConfig)
-                .setStrategy(strategyConfig)
-                .setPackageInfo(packageConfig)
-                .setTemplateEngine(templateEngine)
-                .setTemplate(templateConfig)
-                .setCfg(injectionConfig)
-                .execute();
     }
 
 }

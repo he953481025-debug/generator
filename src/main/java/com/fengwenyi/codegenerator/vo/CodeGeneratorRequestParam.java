@@ -7,7 +7,7 @@ import lombok.Data;
  * @since 2021-07-12
  */
 @Data
-public class CodeGeneratorRequestVo {
+public class CodeGeneratorRequestParam {
 
     // 包名
     private String packageName;
