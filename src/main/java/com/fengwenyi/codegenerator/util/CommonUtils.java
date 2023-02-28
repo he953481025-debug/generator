@@ -17,13 +17,18 @@ import com.fengwenyi.codegenerator.bo.CodeGeneratorBo;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Erwin Feng
  * @since 2019-04-17 12:04
  */
 public class CommonUtils {
+
+    private static final String DIR_PREFIX = "templates/afanti";
 
 
     public static void execute(CodeGeneratorBo bo) {
@@ -49,6 +54,7 @@ public class CommonUtils {
 
     /**
      * 数据库连接信息
+     *
      * @param bo {@link CodeGeneratorBo}
      * @return DataSourceConfig
      */
@@ -67,8 +73,8 @@ public class CommonUtils {
         String outDir = bo.getOutDir();
         if (!StringUtils.hasText(outDir)) {
             outDir = Config.OUTPUT_DIR;
-        }else {
-            Config.OUTPUT_DIR=outDir;
+        } else {
+            Config.OUTPUT_DIR = outDir;
         }
         DateType dateType = DateType.TIME_PACK;
         if (!"8".equalsIgnoreCase(bo.getJdkVersion())) {
@@ -76,7 +82,7 @@ public class CommonUtils {
         }
         return new GlobalConfig()
                 .setAuthor(bo.getAuthor())
-                .setOutputDir(outDir+"/src/main/java")
+                .setOutputDir(outDir + "/src/main/java")
                 .setFileOverride(true) // 是否覆盖已有文件
                 //.setOpen(true) // 是否打开输出目录
                 // 时间采用java 8，（操作工具类：JavaLib => DateTimeUtils）
@@ -86,15 +92,14 @@ public class CommonUtils {
                 // XML 二级缓存
                 .setEnableCache(false)
                 // XML ResultMap
-                .setBaseResultMap(false)
+                .setBaseResultMap(true)
                 // XML columList
-                .setBaseColumnList(false)
+                .setBaseColumnList(true)
                 //是否生成 kotlin 代码
                 .setKotlin(false)
                 // 自定义文件命名，注意 %s 会自动填充表实体属性！
                 .setEntityName(bo.getFileNamePatternEntity())
                 .setMapperName(bo.getFileNamePatternMapper())
-                .setXmlName(bo.getFileNamePatternMapperXml())
                 .setServiceName(bo.getFileNamePatternService())
                 .setServiceImplName(bo.getFileNamePatternServiceImpl())
                 .setControllerName(bo.getFileNamePatternController())
@@ -112,8 +117,8 @@ public class CommonUtils {
 
         return new StrategyConfig()
                 .setRestControllerStyle(true)
-                .setSuperEntityClass("SpecialBaseDBO")
-                .setSuperEntityColumns("id","delete_status","create_time","update_time","create_user_id","update_user_id","tenant_id")
+                .setSuperEntityClass("ActorBaseEntity")
+                .setSuperEntityColumns("id", "actor", "atime", "creator", "modifier", "ctime", "mtime", "is_deleted")
                 .setEntitySerialVersionUID(false)
                 // 全局大写命名 ORACLE 注意
                 .setCapitalMode(true)
@@ -140,7 +145,7 @@ public class CommonUtils {
                 // 乐观锁字段名
                 .setVersionFieldName(bo.getFieldVersion())
                 // 开启实体字段注解
-                .setEntityTableFieldAnnotationEnable(false)
+                .setEntityTableFieldAnnotationEnable(true)
                 ;
     }
 
@@ -151,7 +156,6 @@ public class CommonUtils {
                 .setController(bo.getPackageController())
                 .setEntity(bo.getPackageEntity())
                 .setMapper(bo.getPackageMapper())
-                .setXml(bo.getPackageMapperXml())
                 .setService(bo.getPackageService())
                 .setServiceImpl(bo.getPackageServiceImpl())
                 ;
@@ -160,6 +164,7 @@ public class CommonUtils {
 
     /**
      * 获取模板引擎
+     *
      * @return 模板引擎 {@link AbstractTemplateEngine}
      */
     private static AbstractTemplateEngine getTemplateEngine(CodeGeneratorBo bo) {
@@ -177,15 +182,15 @@ public class CommonUtils {
 
     private static TemplateConfig getTemplateConfig() {
         TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.setEntity("templates/entity.java");
-        templateConfig.setService("templates/service.java");
-        templateConfig.setServiceImpl("templates/serviceImpl.java");
-        templateConfig.setController("templates/controller.java");
+        templateConfig.setEntity( DIR_PREFIX + "/entity.java");
+        templateConfig.setService(DIR_PREFIX + "/service.java");
+        templateConfig.setServiceImpl(DIR_PREFIX + "/serviceImpl.java");
+        templateConfig.setController(DIR_PREFIX + "/controller.java");
+        templateConfig.disable(TemplateType.XML);
         return templateConfig;
     }
 
     /**
-     *
      * @param packageConfig
      * @return
      */
@@ -195,99 +200,57 @@ public class CommonUtils {
             public void initMap() {
                 // to do nothing
             }
+
             @Override
-            public void initTableMap(TableInfo tableInfo){
+            public void initTableMap(TableInfo tableInfo) {
                 Map<String, Object> map = new HashMap<>();
                 String capitalFirst = NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName()));
-                map.put("camelName",NamingStrategy.underlineToCamel(tableInfo.getName()));
+                map.put("camelName", NamingStrategy.underlineToCamel(tableInfo.getName()));
                 map.put("entityName", capitalFirst);
-                map.put("paramPackage", packageConfig.getParent()+".entity.param");
-                map.put("voPackage", packageConfig.getParent()+".entity.vo");
-                map.put("daoPackage",packageConfig.getParent()+".repository.mysql");
-                map.put("daoImplPackage",packageConfig.getParent()+".repository.mysql.impl");
-                map.put("daoName",String.format("I%sDao",capitalFirst));
-                map.put("daoImplName",String.format("%sDaoImpl",capitalFirst));
-                map.put("convertName",String.format("%sConvert",capitalFirst));
-                map.put("voName",String.format("%sVO",capitalFirst));
-                map.put("paramName",String.format("%sParam",capitalFirst));
-                map.put("convertPackage",packageConfig.getParent()+".convert");
+                map.put("paramPackage", packageConfig.getParent() + ".domain.param");
+                map.put("voPackage", packageConfig.getParent() + ".domain.vo");
+                map.put("voName", String.format("%sVO", capitalFirst));
+                map.put("paramName", String.format("%sParam", capitalFirst));
                 this.setMap(map);
             }
         };
         // mapper模版
         List<FileOutConfig> fileOutConfigList = new ArrayList<>();
-        fileOutConfigList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
+        fileOutConfigList.add(new FileOutConfig(StringPool.SLASH + DIR_PREFIX + "/mapper.xml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
                 if (StringUtils.isEmpty(packageConfig.getModuleName())) {
                     return Config.OUTPUT_DIR + "/src/main/resources/mapper/" + tableInfo.getXmlName() + StringPool.DOT_XML;
-                }else {
-                    return Config.OUTPUT_DIR + "/src/main/resources/mapper/" + packageConfig.getModuleName() + "/" + tableInfo.getXmlName() + StringPool.DOT_XML;
+                } else {
+                    return Config.OUTPUT_DIR + "/src/main/resources/mapper/" + packageConfig.getModuleName() + "/" + StringPool.SLASH + StringPool.DOT_XML;
                 }
             }
         });
-        // dao模版
-        fileOutConfigList.add(new FileOutConfig("/templates/dao.java.ftl") {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                String parent = packageConfig.getParent();
-                String parentPath = parent.replace('.', '/');
-                // 自定义输入文件名称
-                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/"+parentPath+"/repository/mysql" + File.separator + "I%sDao" + StringPool.DOT_JAVA
-                        , NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName())));
-                return daoFile;
-            }
-        });
-        // daoImpl模版
-        fileOutConfigList.add(new FileOutConfig("/templates/daoImpl.java.ftl") {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                String parent = packageConfig.getParent();
-                String parentPath = parent.replace('.', '/');
-                // 自定义输入文件名称
-                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/"+parentPath+"/repository/mysql/impl" + File.separator + "%sDaoImpl" + StringPool.DOT_JAVA
-                        , NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName())));
-                return daoFile;
-            }
-        });
         // param模版
-        fileOutConfigList.add(new FileOutConfig("/templates/param.java.ftl") {
+        fileOutConfigList.add(new FileOutConfig(StringPool.SLASH + DIR_PREFIX + "/param.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 String parent = packageConfig.getParent();
                 String parentPath = parent.replace('.', '/');
                 // 自定义输入文件名称
-                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/"+parentPath+"/entity/param" + File.separator + "%sParam" + StringPool.DOT_JAVA
+                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/" + parentPath + "/domain/param" + File.separator + "%sParam" + StringPool.DOT_JAVA
                         , NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName())));
                 return daoFile;
             }
         });
         // vo模版
-        fileOutConfigList.add(new FileOutConfig("/templates/vo.java.ftl") {
+        fileOutConfigList.add(new FileOutConfig(StringPool.SLASH + DIR_PREFIX + "/vo.java.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 String parent = packageConfig.getParent();
                 String parentPath = parent.replace('.', '/');
                 // 自定义输入文件名称
-                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/"+parentPath+"/entity/vo" + File.separator + "%sVO" + StringPool.DOT_JAVA
+                String voFile = String.format(Config.OUTPUT_DIR + "/src/main/java/" + parentPath + "/domain/vo" + File.separator + "%sVO" + StringPool.DOT_JAVA
                         , NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName())));
-                return daoFile;
+                return voFile;
             }
         });
-        // convert模版
-        fileOutConfigList.add(new FileOutConfig("/templates/convert.java.ftl") {
-            @Override
-            public String outputFile(TableInfo tableInfo) {
-                String parent = packageConfig.getParent();
-                String parentPath = parent.replace('.', '/');
-                // 自定义输入文件名称
-                String daoFile = String.format(Config.OUTPUT_DIR + "/src/main/java/"+parentPath+"/convert" + File.separator + "%sConvert" + StringPool.DOT_JAVA
-                        , NamingStrategy.capitalFirst(NamingStrategy.underlineToCamel(tableInfo.getName())));
-                return daoFile;
-            }
-        });
-
         injectionConfig.setFileOutConfigList(fileOutConfigList);
         return injectionConfig;
     }
