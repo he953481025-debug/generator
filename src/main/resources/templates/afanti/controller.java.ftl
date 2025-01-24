@@ -67,15 +67,15 @@ public class ${table.controllerName} {
 
     @ApiOperation("根据id查询${table.comment!}")
     @GetMapping("/{id}")
-    @ApiImplicitParam(value = "${table.comment!}id", dataTypeClass = Long.class, example = "1")
-    public CommonResult<${cfg.voName}> findById(@NotNull(message="id不能为空") @PathVariable("id")Long id){
+    @ApiImplicitParam(value = "${table.comment!}id", dataTypeClass = String.class, example = "1")
+    public CommonResult<${cfg.voName}> findById(@NotNull(message="id不能为空") @PathVariable("id")String id) {
         return CommonResult.success(${cfg.camelName}Service.findById(id));
     }
 
     @ApiOperation("根据id删除${table.comment!}")
     @DeleteMapping("/{id}")
-    @ApiImplicitParam(value = "${table.comment!}id", dataTypeClass = Long.class, example = "1")
-    public CommonResult<Boolean> deleteById(@NotNull(message="id不能为空") @PathVariable("id")Long id){
+    @ApiImplicitParam(value = "${table.comment!}id", dataTypeClass = String.class, example = "1")
+    public CommonResult<Boolean> deleteById(@NotNull(message="id不能为空") @PathVariable("id")String id) {
         return CommonResult.success(${cfg.camelName}Service.deleteById(id));
     }
 }

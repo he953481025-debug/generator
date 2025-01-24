@@ -21,10 +21,6 @@ import lombok.experimental.Accessors;
  */
 <#if entityLombokModel>
 @Data
-    <#if superEntityClass??>
-@EqualsAndHashCode(callSuper = true)
-    <#else>
-    </#if>
     <#if chainModel>
 @Accessors(chain = true)
     </#if>
